@@ -74,7 +74,7 @@ Page {
         Item {
             id: settingsContainer
             width: parent.width
-            height: settingsList.height + aboutButton.height + UiConstants.DefaultMargin
+            height: settingsList.height + aboutButton.height + UiConstants.DefaultMargin + endOfNokiaButton.height + UiConstants.DefaultMargin
 
             Column {
                 id: settingsList
@@ -152,6 +152,20 @@ Page {
                 onClicked: pageStack.push(aboutPage);
 
             }
+
+            Button {
+                id: endOfNokiaButton
+
+                text: qsTr("Important information")
+                anchors {
+                    top: aboutButton.bottom
+                    topMargin: UiConstants.DefaultMargin
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                onClicked: endOfNokia.open();
+
+            }
         }
     }
 
@@ -189,5 +203,35 @@ Page {
     onStatusChanged: {
         if (status === PageStatus.Activating)
             calendarManager.reload();
+    }
+
+    /*
+      END OF NOKIA STORE DIALOG
+    */
+    Dialog {
+      id: endOfNokia
+
+      content:Item {
+        width: parent.width
+        height: appWindow.inPortrait ? 400: 250;
+        Text {
+          wrapMode: Text.WordWrap
+          width: parent.width
+          textFormat: Text.RichText
+          font.pixelSize: 22
+          anchors.centerIn: parent
+          color: "white"
+          text: "Hello, starting January 1, 2014, due to nokia dropping the developer support for symbian and meego, i'm no longer able to " +
+                "update fahrplan via the nokia store.<br><br>"+
+                "New versions and informations will be available here: <a href=\"http://fahrplan.smurfy.de/nokiastore\">fahrplan.smurfy.de/nokiastore</a>"
+          onLinkActivated : Qt.openUrlExternally(link);
+        }
+      }
+
+      buttons: ButtonRow {
+        style: ButtonStyle { }
+          anchors.horizontalCenter: parent.horizontalCenter
+          Button {text: "OK"; onClicked: endOfNokia.accept()}
+        }
     }
 }
